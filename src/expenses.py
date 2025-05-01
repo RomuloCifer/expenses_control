@@ -27,6 +27,9 @@ def adicionar_despesa(tipo, nome, valor):
     elif tipo == 'o':
         print("Adicionando aos outros...")
         despesas['outros'][nome] = valor
+    else:
+        print("Tipo de despesa inválido. Tente novamente.")
+        return
 
 rodar_programa2 = True
 while rodar_programa2:
