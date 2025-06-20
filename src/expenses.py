@@ -1,43 +1,74 @@
-despesas = {
-    'lazer': {},
-    'contas': {},
-    'alimentacao': {},
-    'outros': {}
+"""Módulo simples para controle de despesas por categoria."""
+
+from typing import Dict
+
+
+CATEGORY_MAP = {
+    "l": "lazer",
+    "c": "contas",
+    "a": "alimentacao",
+    "o": "outros",
 }
 
-def pergunta_usuario():
-    tipo_custo = input('Que tipo de despesa você quer add? \n'
-    '[l]azer,[c]ontas,[a]limentacao ou [o]utros: ')
-    nome_custo = input('Qual nome da despesa? ')
-    custo_atividade = input('Qual valor da atividade? ')
-    custo_atividade = int(custo_atividade)
-    return tipo_custo, nome_custo, custo_atividade
+# Estrutura para armazenar as despesas de cada categoria
+despesas: Dict[str, Dict[str, float]] = {
+    categoria: {} for categoria in CATEGORY_MAP.values()
+}
 
-def adicionar_despesa(tipo, nome, valor):
-    print(f"Tipo: {tipo}, Nome: {nome}, Valor: {valor}")  # Verificar se estamos recebendo os valores corretos
-    if tipo == 'l':
-        print("Adicionando ao lazer...")
-        despesas['lazer'][nome] = valor
-    elif tipo == 'c':
-        print("Adicionando às contas...")
-        despesas['contas'][nome] = valor
-    elif tipo == 'a':
-        print("Adicionando à alimentação...")
-        despesas['alimentacao'][nome] = valor
-    elif tipo == 'o':
-        print("Adicionando aos outros...")
-        despesas['outros'][nome] = valor
-    else:
+def pergunta_usuario() -> tuple[str, str, float]:
+    """Pergunta ao usuário os dados da despesa e retorna-os."""
+
+    while True:
+        tipo_custo = input(
+            "Que tipo de despesa você quer add?\n[l]azer,[c]ontas,[a]limentacao ou [o]utros: "
+        ).lower()
+        if tipo_custo in CATEGORY_MAP:
+            break
+        print("Tipo de despesa inválido. Tente novamente.")
+
+    nome_custo = input("Qual nome da despesa? ")
+
+    while True:
+        custo_str = input("Qual valor da atividade? ")
+        try:
+            custo_valor = float(custo_str)
+            break
+        except ValueError:
+            print("Valor inválido. Digite um número.")
+
+    return tipo_custo, nome_custo, custo_valor
+
+def adicionar_despesa(tipo: str, nome: str, valor: float) -> None:
+    """Registra uma nova despesa na categoria informada."""
+
+    categoria = CATEGORY_MAP.get(tipo)
+    if categoria is None:
         print("Tipo de despesa inválido. Tente novamente.")
         return
 
-rodar_programa2 = True
-while rodar_programa2:
-    tipo_atividade, nome_atividade, custo_atividade = pergunta_usuario()
-    adicionar_despesa(tipo_atividade, nome_atividade, custo_atividade)
+    despesas[categoria][nome] = valor
 
-    rodar_programa2 = input('Deseja continuar? [s] [n] ').lower()
-    if rodar_programa2 == 'n':
-        rodar_programa2 = False
+def exibir_despesas() -> None:
+    """Exibe todas as despesas cadastradas."""
 
-print(despesas)
+    for categoria, itens in despesas.items():
+        print(f"\n{categoria.capitalize()}:")
+        for nome, valor in itens.items():
+            print(f"  {nome}: R$ {valor:.2f}")
+
+
+def main() -> None:
+    """Laço principal do programa."""
+
+    continuar = True
+    while continuar:
+        tipo, nome, valor = pergunta_usuario()
+        adicionar_despesa(tipo, nome, valor)
+        continuar = input("Deseja continuar? [s/n] ").lower() == "s"
+
+    print("\nDespesas registradas:")
+    exibir_despesas()
+
+
+if __name__ == "__main__":
+    main()
