@@ -15,8 +15,10 @@ Este é um projeto simples para controle de despesas, permitindo adicionar e cat
 
 1. Execute o script `expenses.py`.
 2. Siga as instruções no terminal para adicionar despesas.
+   - O programa valida o tipo de despesa informado e o valor digitado.
+   - Valores podem ser informados com casas decimais.
 3. Escolha se deseja continuar adicionando despesas ou encerrar o programa.
-4. Ao final, todas as despesas serão exibidas no terminal.
+4. Ao final, todas as despesas serão exibidas no terminal de forma organizada.
 
 ## Estrutura do Projeto
 
